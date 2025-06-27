@@ -1,0 +1,59 @@
+package com.midominio.camel.documentsign.route;
+
+import com.midominio.camel.documentsign.constants.AppConstants;
+import com.midominio.camel.documentsign.models.ClientSendRequest;
+import com.midominio.camel.documentsign.models.ClientSendResponse;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.builder.endpoint.dsl.JmsEndpointBuilderFactory;
+import org.apache.camel.builder.endpoint.dsl.JmsEndpointBuilderFactory.JmsEndpointProducerBuilder;
+import org.apache.camel.builder.endpoint.dsl.SqlEndpointBuilderFactory;
+import org.apache.camel.builder.endpoint.dsl.SqlEndpointBuilderFactory.SqlEndpointBuilder;
+import org.springframework.stereotype.Component;
+
+import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.jms;
+import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.sql;
+
+@Component
+public class SendDocumentRoute extends RouteBuilder {
+
+    public static final String START_ROUTE = "direct:send-document-route-start";
+    public static final String ROUTE_ID = "SendDocumentRoute";
+
+    public static final JmsEndpointProducerBuilder JMS =
+            jms("{{app.clientSend.clientSendRequestQueue}}")
+//                    .replyTo("{{app.clientSend.clientSendResponseQueue}}")
+                    .replyTo("{{app.clientSend.clientSendRequestQueue}}")
+                    .requestTimeout(300000L);
+
+    /** Component to update object in DB. */
+    public static final SqlEndpointBuilder SQL_LOG_ENDPOINT =
+            sql("update docsign_log set status=:#${body.getStatus}, \"timestamp\"=:#${date:now} " +
+                "where id=:#${header." + ReadDocumentRoute.DB_LOG_ID + "}");
+    //headers.
+
+    /**
+     * Send file to SignDocument jms service.
+     * @throws Exception general exception.
+     */
+    @Override
+    public void configure() throws Exception {
+        from(START_ROUTE)
+                .routeId(ROUTE_ID)
+                .log("body: ${body}")
+                .log("headers: ${headers}")
+                .bean("clientSendRequestMapper")
+                .log("Sending signed document to client: ${header." + AppConstants.CLIENT_ID + "}")
+                .marshal().jacksonxml(ClientSendRequest.class)
+                .log("body: ${body}")
+                .to(ExchangePattern.InOut, JMS)
+                .unmarshal().jacksonxml(ClientSendResponse.class)
+                .log("Document signed status: ${body.getStatus}")
+                .log("Update id = ${header." + ReadDocumentRoute.DB_LOG_ID + "}")
+                .to(SQL_LOG_ENDPOINT)
+                .log("Processing document: ${header." + Exchange.FILE_NAME + "} finished.")
+        ;
+
+    }
+}

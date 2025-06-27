@@ -47,7 +47,7 @@ public class SignDocumentRoute extends RouteBuilder {
                 .log("Received document from the Sign Document Service: ${body}")
                 .log("Document signed status: ${body.getStatus}")
                 .to(SQL_LOG_ENDPOINT)
-//                .to(SendDocumentRoute.START_ROUTE)
+                .to(SendDocumentRoute.START_ROUTE)
         ;
 
     }
