@@ -68,6 +68,8 @@
       <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-stream-starter</artifactId>
     </dependency>
+
+<!--		Test dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -78,14 +80,20 @@
       <artifactId>camel-test-spring-junit5</artifactId>
       <scope>test</scope>
     </dependency>
+<!--		end Test dependencies -->
+
     <dependency>
       <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-resilience4j-starter</artifactId>
     </dependency>
+
+<!--    HTTP -->
     <dependency>
       <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-http-starter</artifactId>
     </dependency>
+<!--    end HTTP -->
+
     <!--   JMS -->
     <dependency>
       <groupId>org.apache.camel</groupId>
@@ -116,7 +124,7 @@
     </dependency>
 <!--    end Endpoint DSL -->
 
-    <!--		Sql -->
+<!--		Sql -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -130,7 +138,26 @@
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <!--		end Sql -->
+<!--		end Sql -->
+
+<!--		Jackson -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-json</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-jackson-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-jacksonxml-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+    </dependency>
+<!--		end Jackson -->
 
   </dependencies>
   <build>
