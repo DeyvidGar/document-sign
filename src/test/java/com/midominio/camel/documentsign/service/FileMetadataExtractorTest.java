@@ -28,15 +28,15 @@ class FileMetadataExtractorTest extends CamelExchangeSupport {
         String body = "Hello World";
         String fileName = documentId + "_" + ownerId + "_" + documentType + "_" + clientId + ".pdf";
 
-        getMessage().setBody(body);
-        getMessage().setHeader(Exchange.FILE_NAME, fileName);
-        getExchange().setMessage(getMessage());
+        getExchange().getMessage().setBody(body);
+        getExchange().getMessage().setHeader(Exchange.FILE_NAME, fileName);
+        getExchange().setMessage(getExchange().getMessage());
 
         fileMetadataExtractor.parseFileName(getExchange());
 
-        Assertions.assertEquals(documentId, getMessage().getHeader("documentId"));
-        Assertions.assertEquals(ownerId, getMessage().getHeader("ownerId"));
-        Assertions.assertEquals(documentType, getMessage().getHeader("documentType"));
-        Assertions.assertEquals(clientId, getMessage().getHeader("clientId"));
+        Assertions.assertEquals(documentId, getExchange().getMessage().getHeader("documentId"));
+        Assertions.assertEquals(ownerId, getExchange().getMessage().getHeader("ownerId"));
+        Assertions.assertEquals(documentType, getExchange().getMessage().getHeader("documentType"));
+        Assertions.assertEquals(clientId, getExchange().getMessage().getHeader("clientId"));
     }
 }

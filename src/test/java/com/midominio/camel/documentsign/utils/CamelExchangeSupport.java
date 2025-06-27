@@ -28,7 +28,4 @@ public class CamelExchangeSupport {
         return exchange;
     }
 
-    public Message getMessage() {
-        return message;
-    }
 }
