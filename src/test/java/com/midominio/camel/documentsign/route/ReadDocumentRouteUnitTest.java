@@ -21,7 +21,6 @@ import javax.sql.DataSource;
 @SpringBootTest
 @CamelSpringBootTest
 @ActiveProfiles({"sftp", "sql"})
-//@ExcludeRoutes({SignDocumentRoute.class})
 class ReadDocumentRouteUnitTest {
 
     private static final String START_TEST = "direct:test";

@@ -6,6 +6,7 @@ import org.apache.camel.model.RouteDefinition;
 
 /** AdviceWith util class. */
 public class AdviceWithUtilConfigurable {
+
     /** CamelContext. */
     private final CamelContext context;
     /** Route id. */
