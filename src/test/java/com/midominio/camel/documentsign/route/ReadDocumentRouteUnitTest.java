@@ -25,6 +25,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+
 /** Unit test for ReadDocumentRoute */
 @SpringBootTest
 @CamelSpringBootTest
@@ -34,6 +37,7 @@ class ReadDocumentRouteUnitTest {
     private static final String START_TEST = "direct:test";
     private static final String MOCK_SQL = "mock:sql";
     private static final String MOCK_END = "mock:at-final";
+    private static final String MOCK_ERROR = "mock:on-exception-sql";
 
     /** Initial endpoint. */
     @Produce(START_TEST)
@@ -44,6 +48,8 @@ class ReadDocumentRouteUnitTest {
     private MockEndpoint sqlMockEndpoint;
     @EndpointInject(MOCK_END)
     private MockEndpoint endMockEndpoint;
+    @EndpointInject(MOCK_ERROR)
+    private MockEndpoint errorMockEndpoint;
 
     /** Mock bean in route. */
     @MockBean(name = "fileMetadataExtractor")
@@ -58,6 +64,7 @@ class ReadDocumentRouteUnitTest {
     /** Set up method. */
     @BeforeEach
     public void setUp() throws Exception {
+        //rest
         AdviceWithUtilConfigurable adviceWith = new AdviceWithUtilConfigurable(context, ReadDocumentRoute.ROUTE_ID);
 
         adviceWith.replaceFromWith(START_TEST);
@@ -67,6 +74,8 @@ class ReadDocumentRouteUnitTest {
         );
         adviceWith.interceptAndSkipAndTo(
                 SignDocumentRoute.ROUTE_START, MOCK_END);
+        adviceWith.interceptAndSkipAndTo(
+                ErrorHandlingConfiguration.SQL.getUri(), MOCK_ERROR);
     }
 
     /**
@@ -84,7 +93,24 @@ class ReadDocumentRouteUnitTest {
 
         sqlMockEndpoint.expectedMessageCount(TestConstants.ONE_INT);
         endMockEndpoint.expectedMessageCount(TestConstants.ONE_INT);
-        MockEndpointsUtil.checkAssertionsSatisfied(sqlMockEndpoint, endMockEndpoint);
+
+        errorMockEndpoint.expectedMessageCount(0);
+        MockEndpointsUtil.checkAssertionsSatisfied(sqlMockEndpoint, endMockEndpoint, errorMockEndpoint);
+    }
+
+    @Test
+    void documentReadRoute_exception() throws InterruptedException {
+        RuntimeException runtimeException = new RuntimeException("Invalid format.");
+        doThrow(runtimeException).when(fileMetadataExtractor).parseFileName(Mockito.any(Exchange.class));
+
+        assertThrows(runtimeException.getClass(), () ->{
+            producerTemplate.sendBodyAndHeader(TestConstants.BODY, Exchange.FILE_NAME, TestConstants.HEADER_VALUE);
+        });
+
+        sqlMockEndpoint.expectedMessageCount(0);
+        endMockEndpoint.expectedMessageCount(0);
+        errorMockEndpoint.expectedMessageCount(0);
+        MockEndpointsUtil.checkAssertionsSatisfied(sqlMockEndpoint, endMockEndpoint, errorMockEndpoint);
     }
 
 }

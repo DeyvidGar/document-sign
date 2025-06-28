@@ -27,6 +27,7 @@ public class SignDocumentRequestMapper {
     public void makeSignDocumentRequest(Exchange exchange) {
         Message message = exchange.getMessage();
         SignDocumentRequest request = new SignDocumentRequest();
+
         request.setDocument(Base64.getEncoder().encodeToString(message.getBody(byte[].class)));
         request.setOwnerId(message.getHeader("ownerId", String.class));
         request.setSignType(signDocumentSignType);

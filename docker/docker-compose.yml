@@ -1,0 +1,38 @@
+name: document-sign-plus
+services:
+  sftp:
+    image: atmoz/sftp:alpine
+    container_name: sftp
+    ports:
+      - "2222:22"
+    volumes:
+      - ./data:/home/testuser/documents
+    command: user:password:::/documents
+
+  postgres:
+    image: postgres
+    container_name: postgres_container
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+
+  artemismq:
+    image: apache/activemq-artemis:latest-alpine
+    ports:
+      - "61616:61616"
+      - "8161:8161"

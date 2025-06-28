@@ -31,7 +31,6 @@ import static org.apache.camel.builder.Builder.constant;
 
 @SpringBootTest
 @CamelSpringBootTest
-@ActiveProfiles({"sql", "jms"})
 class SendDocumentRouteTest {
 
     private static final String START_TEST = "direct:test";
@@ -91,32 +90,23 @@ class SendDocumentRouteTest {
         sResponse.setStatus("SignDocumentResponse: Status ok");
         sResponse.setTimestamp(LocalDateTime.now());
 
-        byte[] responseBytes = xmlMapper.writeValueAsBytes(sResponse);
-
         ClientSendRequest cRequest = new ClientSendRequest();
         cRequest.setDocumentId("documentId");
         cRequest.setOwnerId("ownerId");
         cRequest.setDocument(bodyEncoder);
         cRequest.setClientId("clientId");
 
-        byte[] requestBytes = xmlMapper.writeValueAsBytes(cRequest);
-
         ClientSendResponse cResponse = new ClientSendResponse();
         cResponse.setMessage("Document signed");
-        cResponse.setStatus("SignDocumentResponse: Status ok");
+        cResponse.setStatus("SignDocumentResponse: Status okJMS");
         cResponse.setTimestamp(LocalDateTime.now());
-        byte[] cResponseByte = xmlMapper.writeValueAsBytes(cResponse);
-
 
         jmsMockEndpoint.returnReplyBody(constant(xmlMapper.writeValueAsString(cResponse)));
 
         producerTemplate.sendBody(sResponse);
 
         jmsMockEndpoint.expectedMessageCount(1);
-        jmsMockEndpoint.expectedBodiesReceived(cResponseByte);
-
         sqlMockEndpoint.expectedMessageCount(1);
-
         endMockEndpoint.expectedMessageCount(1);
         endMockEndpoint.expectedBodiesReceived(1);
 

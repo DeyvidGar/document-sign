@@ -62,6 +62,7 @@ class SignDocumentRouteTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /** Set up method. */
     @BeforeEach
     void setUp() throws Exception {
         AdviceWithUtilConfigurable adviceWith =

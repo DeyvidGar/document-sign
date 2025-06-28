@@ -41,9 +41,8 @@ public class SendDocumentRoute extends RouteBuilder {
     public void configure() throws Exception {
         from(START_ROUTE)
                 .routeId(ROUTE_ID)
-                .log("body: ${body}")
-                .log("headers: ${headers}")
                 .bean("clientSendRequestMapper")
+                .log("Object to send to jms: ${body}")
                 .log("Sending signed document to client: ${header." + AppConstants.CLIENT_ID + "}")
                 .marshal().jacksonxml(ClientSendRequest.class)
                 .log("body: ${body}")

@@ -12,21 +12,18 @@ public class SignDocumentController {
 
     @PostMapping("/sign-document")
     public SignDocumentResponse signDocumentResponse(@RequestBody SignDocumentRequest request) {
-        System.out.println("request = " + request);
 
         SignDocumentResponse signDocumentResponse = new SignDocumentResponse();
         signDocumentResponse.setSignedDocument(request.getDocument());
         signDocumentResponse.setStatus("Signed document");
         signDocumentResponse.setMessage("Status OK");
         signDocumentResponse.setTimestamp(LocalDateTime.now());
-        System.out.println("signDocumentResponse = " + signDocumentResponse);
 
         return signDocumentResponse;
     }
 
     @PostMapping("/hello")
     public String hello(@RequestBody Object object) {
-        System.out.println("object = " + object);
         return "Hello world";
     }
 }
