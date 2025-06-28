@@ -16,16 +16,16 @@ import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.sql;
 @Component
 public class ReadDocumentRoute extends RouteBuilder {
 
-    /** route id */
+    /** Route id. */
     public static final String ROUTE_ID = "RaadDocumentRoute";
 
-    /** Database log id. */
+    /** Header name for database id. */
     public static final String DB_LOG_ID = "databaseLogId";
 
-    /** Initial component to receive File and reading */
+    /** Initial component to upload file and reading from SFTP server. */
     public static final SftpEndpointConsumerBuilder SFTP_ENDPOINT =
             sftp("{{app.sftp.host}}:{{app.sftp.port}}/{{app.sftp.directoryName}}")
-                .username("{{app.sftp.username}}")
+                    .username("{{app.sftp.username}}")
                     .password("{{app.sftp.password}}")
                     .preMove(".processing")
                     .move(".done")
@@ -49,6 +49,7 @@ public class ReadDocumentRoute extends RouteBuilder {
                 .log("Read header: ${header." + Exchange.FILE_NAME + "}")
                 .bean("fileMetadataExtractor")
                 .setHeader(SqlConstants.SQL_RETRIEVE_GENERATED_KEYS, constant("true"))
+                .log("Insert OwnerId:${header.ownerId}")
                 .to(SQL_LOG_ENDPOINT)
                 .setHeader(
                         DB_LOG_ID,
