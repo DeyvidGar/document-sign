@@ -23,13 +23,13 @@ public class SendDocumentRoute extends RouteBuilder {
 
     public static final JmsEndpointProducerBuilder JMS =
             jms("{{app.clientSend.clientSendRequestQueue}}")
-//                    .replyTo("{{app.clientSend.clientSendResponseQueue}}")
-                    .replyTo("{{app.clientSend.clientSendRequestQueue}}")
+                    .replyTo("{{app.clientSend.clientSendResponseQueue}}")
+//                    .replyTo("{{app.clientSend.clientSendRequestQueue}}")
                     .requestTimeout(300000L);
 
     /** Component to update object in DB. */
     public static final SqlEndpointBuilder SQL_LOG_ENDPOINT =
-            sql("update docsign_log set status=:#${body.getStatus}, \"timestamp\"=:#${date:now} " +
+            sql("update docsign_log set status='Document sent', \"timestamp\"=:#${date:now} " +
                 "where id=:#${header." + ReadDocumentRoute.DB_LOG_ID + "}");
     //headers.
 
