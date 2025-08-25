@@ -9,13 +9,19 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/** POJO class for xml request model. */
+/** POJO class for XML request model. */
 public class ClientSendRequest {
+
+    /** DocumentId value. */
     private String documentId;
+    /** OwnerId value. */
     private String ownerId;
+    /** Document signed value. */
     private String document;
+    /** DocumentId value. */
     private String clientId;
 
+    /** Date and time value. */
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING)

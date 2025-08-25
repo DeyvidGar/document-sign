@@ -1,6 +1,6 @@
 package com.midominio.camel.documentsign.constants;
 
-/** Class for constants values. */
+/** Class for constants values in the flow of exchange message in the Camel routes. */
 public class ExchangeConstants {
 
     /**

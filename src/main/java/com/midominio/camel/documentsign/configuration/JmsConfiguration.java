@@ -19,10 +19,10 @@ public class JmsConfiguration {
     private final String artemisPassword;
 
     /**
-     * Constructor to inject values.
-     * @param artemisUrl value.
-     * @param artemisUsername value.
-     * @param artemisPassword value.
+     * Constructor to inject values from properties configuration.
+     * @param artemisUrl inject value.
+     * @param artemisUsername inject value.
+     * @param artemisPassword inject value.
      */
     public JmsConfiguration(
             @Value("app.artemis.url") String artemisUrl,

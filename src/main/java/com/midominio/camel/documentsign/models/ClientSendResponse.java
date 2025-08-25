@@ -10,12 +10,16 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/** POJO class for xml response model. */
+/** POJO class for XML response model. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientSendResponse {
+
+    /** Status value. */
     private String status;
+    /** Message value. */
     private String message;
 
+    /** Date and time value.*/
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING)

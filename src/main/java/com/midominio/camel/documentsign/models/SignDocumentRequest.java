@@ -2,13 +2,18 @@ package com.midominio.camel.documentsign.models;
 
 import java.util.Objects;
 
-/** POJO class for request model. */
+/** POJO class for HTTP request model. */
 public class SignDocumentRequest {
 
+    /** Document signed value. */
     private String document;
+    /** OwnerId value. */
     private String ownerId;
+    /** Sign type value. */
     private String signType;
+    /** Api key value. */
     private String apiKey;
+    /** Document type value. */
     private String documentType;
 
     public SignDocumentRequest() {

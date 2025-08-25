@@ -1,6 +1,6 @@
 package com.midominio.camel.documentsign.constants;
 
-/** Class for constants values. */
+/** Class for numbers constants values. */
 public class NumberConstants {
 
     /** Int value to get number 0. */
