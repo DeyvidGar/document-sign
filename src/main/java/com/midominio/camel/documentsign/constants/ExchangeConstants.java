@@ -15,6 +15,24 @@ public class ExchangeConstants {
     /** Header value 'clientId'. */
     public static String CLIENT_ID = "clientId";
 
+    /**
+     * Characters.
+     */
+    /** Value to split the file name in header. */
+    public static String UNDERSCORE = "_";
+
+    /**
+     * Strings.
+     */
+    /** Value to split the suffix in file name in header. */
+    public static String SUFFIX_FILENAME = ".pdf";
+
+    /**
+     * Messages.
+     */
+    /** Message to throw exception in the format on file name. */
+    public static String INVALID_FORMAT = "Invalid format.";
+
     /** Private Constructor for not instance. */
     private ExchangeConstants() {
     }
