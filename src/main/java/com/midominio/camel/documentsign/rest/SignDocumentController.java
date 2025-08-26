@@ -6,10 +6,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+/** Sing document controller class to simulate external petition. */
 @RestController
 @RequestMapping("/api")
 public class SignDocumentController {
 
+    /**
+     * Method to response with SignDocumentResponse model.
+     * @param request object to create SignDocumentResponse object.
+     * @return SignDocumentResponse object.
+     */
     @PostMapping("/sign-document")
     public SignDocumentResponse signDocumentResponse(@RequestBody SignDocumentRequest request) {
 
@@ -20,10 +26,5 @@ public class SignDocumentController {
         signDocumentResponse.setTimestamp(LocalDateTime.now());
 
         return signDocumentResponse;
-    }
-
-    @PostMapping("/hello")
-    public String hello(@RequestBody Object object) {
-        return "Hello world";
     }
 }
