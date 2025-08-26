@@ -13,15 +13,17 @@ import org.springframework.stereotype.Component;
 import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.http;
 import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.sql;
 
+/** Sign document route builder. */
 @Component
 public class SignDocumentRoute extends RouteBuilder {
 
     /** Initial route. */
     public static final String ROUTE_START = "direct:sign-document-route-start";
+
     /** Route id. */
     public static final String ROUTE_ID = "SignDocumentRoute";
 
-    /** Component to connect with http service. */
+    /** Component to connect with HTTP service. */
     public static final HttpEndpointBuilder HTTP_ENDPOINT =
             http("{{app.signDocument.url}}");
 
@@ -31,7 +33,7 @@ public class SignDocumentRoute extends RouteBuilder {
                 "where id=:#${header." + ReadDocumentRoute.DB_LOG_ID + "}");
 
     /**
-     * Send file to SignDocument http service.
+     * Send file to http service for sign document.
      * @throws Exception general exception.
      */
     @Override

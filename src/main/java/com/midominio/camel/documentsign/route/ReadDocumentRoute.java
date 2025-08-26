@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component;
 import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.sftp;
 import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.sql;
 
-/** ReadDocumentRoute builder. */
+/** Read document route builder. */
 @Component
 public class ReadDocumentRoute extends RouteBuilder {
 
     /** Route id. */
     public static final String ROUTE_ID = "RaadDocumentRoute";
 
-    /** Header name for database id. */
+    /** Header name with ID of the data when insert in database. */
     public static final String DB_LOG_ID = "databaseLogId";
 
-    /** Initial component to upload file and reading from SFTP server. */
+    /** Initial component when upload and reading file from SFTP server. */
     public static final SftpEndpointConsumerBuilder SFTP_ENDPOINT =
             sftp("{{app.sftp.host}}:{{app.sftp.port}}/{{app.sftp.directoryName}}")
                     .username("{{app.sftp.username}}")
@@ -49,7 +49,7 @@ public class ReadDocumentRoute extends RouteBuilder {
                 .log("Read header: ${header." + Exchange.FILE_NAME + "}")
                 .bean("fileMetadataExtractor")
                 .setHeader(SqlConstants.SQL_RETRIEVE_GENERATED_KEYS, constant("true"))
-                .log("Insert OwnerId:${header.ownerId}")
+                .log("Insert OwnerId: ${header.ownerId}")
                 .to(SQL_LOG_ENDPOINT)
                 .setHeader(
                         DB_LOG_ID,
