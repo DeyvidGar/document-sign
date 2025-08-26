@@ -1,5 +1,6 @@
 package com.midominio.camel.documentsign.service;
 
+import com.midominio.camel.documentsign.constants.ExchangeConstants;
 import com.midominio.camel.documentsign.models.ClientSendRequest;
 import com.midominio.camel.documentsign.models.SignDocumentResponse;
 import org.apache.camel.Exchange;
@@ -11,18 +12,18 @@ import org.springframework.stereotype.Service;
 public class ClientSendRequestMapper {
 
     /**
-     * Create ClientSendRequest to get xml object.
-     * @param exchange
+     * Create ClientSendRequest model to send in XML object.
+     * @param exchange message in transit in Camel route.
      */
     public void createClientSendRequest(Exchange exchange) {
         Message message = exchange.getMessage();
         SignDocumentResponse signDocumentResponse = message.getBody(SignDocumentResponse.class);
 
         ClientSendRequest clientSendRequest = new ClientSendRequest();
-        clientSendRequest.setDocumentId(message.getHeader("documentId", String.class));
-        clientSendRequest.setOwnerId(message.getHeader("ownerId", String.class));
+        clientSendRequest.setDocumentId(message.getHeader(ExchangeConstants.DOCUMENT_ID, String.class));
+        clientSendRequest.setOwnerId(message.getHeader(ExchangeConstants.OWNER_ID, String.class));
         clientSendRequest.setDocument(signDocumentResponse.getSignedDocument());
-        clientSendRequest.setClientId(message.getHeader("clientId", String.class));
+        clientSendRequest.setClientId(message.getHeader(ExchangeConstants.CLIENT_ID, String.class));
 
         message.setBody(clientSendRequest);
     }
